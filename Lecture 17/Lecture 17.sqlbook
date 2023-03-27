@@ -98,6 +98,9 @@ Try it yourself!
 -- Add your name/nationality and your neighbors'
 -- Select a new driver id (needs to be unique)
 -- Make sure to deparate arguments by a semicolon!
+INSERT INTO drivers  VALUES (7, 'xiyangyang', 'japan',50);
+INSERT INTO drivers  VALUES (5, 'meiyangyang', 'china',49);
+INSERT INTO drivers  VALUES (6, 'huitailang', 'france',66);
 
 
 
@@ -187,6 +190,8 @@ Try it yourself!
 with more than 60 victories
 -- SQLBook: Code
 -- Write your own code!
+SELECT nationality, driver_id FROM drivers
+WHERE victories > 60;
 
 
 
@@ -224,6 +229,7 @@ SELECT nationality,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
 FROM drivers
+WHERE (nationality='German' )
 GROUP BY nationality
 HAVING SUM(victories) > 50;
 -- SQLBook: Markup
