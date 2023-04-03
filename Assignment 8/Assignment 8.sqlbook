@@ -32,14 +32,17 @@ HINT: Remember that you have to find the pathname of the <br>
 HINT: Include any column names with upper case in doube quotations, <br> e.g.
 "raceId". If you don't you'll get an error
 -- SQLBook: Code
+-- Active: 1679947740628@@127.0.0.1@5432@postgres
 -- Write your own code
-DROP TABLE IF EXISTS ;
+DROP TABLE IF EXISTS results;
 
-CREATE TABLE drivers(
-    driver_id int,
-    driver_name varchar(30),
-    nationality varchar(15),
-    victories int
+CREATE TABLE results(
+     "raceId" int,
+   "driverId" int,
+   lap int,
+   position int,
+  time varchar(255),
+    milliseconds int
 );    
 
 
@@ -58,6 +61,22 @@ and  import the data from "data_raw/drivers.csv"
 
 -- SQLBook: Code
 -- Write your own code
+DROP TABLE IF EXISTS drivers;
+
+CREATE TABLE drivers(
+   "driverId" int,
+   "driverRef" varchar(255),
+   number VARCHAR(255),
+   code varchar(3),
+  forename varchar(255),
+    surname varchar(255),
+    dob varchar(255),
+    nationality varchar(255),
+    url varchar(255));    
+
+COPY drivers
+FROM '/private/tmp/drivers copy.csv'
+WITH (DELIMITER',', FORMAT csv, HEADER MATCH)
 
 
 
@@ -83,7 +102,10 @@ Hints:
 
 -- SQLBook: Code
 -- Write your own code
-
+SELECT * 
+FROM drivers
+WHERE nationality= 'American'
+ORDER BY surname ASC;
 
 
 -- SQLBook: Markup
@@ -101,6 +123,10 @@ HINT: Include "driverId" in quotations since it has a mix of <br>
 upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
+SELECT COUNT(DISTINCT "driverId") AS distinct_driver,
+       COUNT(*) AS num_members       
+FROM drivers
+
 
 
 
@@ -119,8 +145,18 @@ HINT: Include "driverId" in quotations since it has a mix of <br>
 upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
-
-
+--SELECT "driverId" 
+    --AVG(milliseconds) AS avg_milliseconds, 
+    --SUM(milliseconds) AS sum_milliseconds
+--FROM lap_times
+--GROUP BY "driverId"
+--ORDER BY milliseconds DESC;
+SELECT "driverId", 
+    AVG(milliseconds) AS avg_milliseconds,
+    SUM(milliseconds) AS sum_milliseconds
+FROM lap_times
+GROUP BY "driverId"
+ORDER BY sum_milliseconds ASC
 
 -- SQLBook: Markup
 <font size = "5">
@@ -139,7 +175,7 @@ upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
 SELECT * 
-FROM bills_actions
-LEFT JOIN us_congress_members
-ON bills_actions.member_id  = bills_actions.member_id
+FROM lap_times
+LEFT JOIN drivers
+ON lap_times."driverId"  = drivers."driverId"
 
